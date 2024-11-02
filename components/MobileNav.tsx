@@ -29,9 +29,6 @@ const MobileNav = ({ user }: MobileNavProps) => {
                     />
                 </SheetTrigger>
                 <SheetContent side="left" className="border-none bg-white">
-                    <SheetHeader>
-                        <SheetTitle className="text-black-1">Menu</SheetTitle>
-                    </SheetHeader>
                     <Link href="/" className="cursor-pointer flex items-center gap-1 px-4">
                         <Image
                             src="/icons/logo.svg"
