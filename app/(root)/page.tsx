@@ -3,7 +3,7 @@ import TotalBalanceBox from '@/components/TotalBalanceBox';
 
 
 const Home = () => {
-    const loggedIn = { firstName: 'Dog Nitt'}; // Fixed missing quote and completed LastName
+    const loggedIn = { firstName: 'Jennie'}; // Fixed missing quote and completed LastName
 
     return (
         <section className="home">
@@ -20,7 +20,7 @@ const Home = () => {
                     <TotalBalanceBox 
                     accounts = {[]}
                     totalBank={1}
-                    totalCurrentBalance= {1875654.89}
+                    totalCurrentBalance= {10.89}
                     />
                 </header>
             </div>
