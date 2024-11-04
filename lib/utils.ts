@@ -195,9 +195,19 @@ export const getTransactionStatus = (date: Date) => {
   return date > twoDaysAgo ? "Processing" : "Success";
 };
 
+export const authFormSchema = (type: string) => z.object({
+  // ====== sign up =======
+  firstName: type === 'sign-in' ? z.string().optional() :  z.string().min(3, "First Name should be at least 3 characters long"),
+  lastName:  type === 'sign-in' ? z.string().optional() : z.string().min(3, "Last Name should be at least 3 characters long"),
+  address: type === 'sign-in' ? z.string().optional() :  z.string().max(50, "Address should be 50 characters or less"),
+  city: type === 'sign-in' ? z.string().optional() :  z.string().max(50, "City should be 50 characters or less"),
+  state: type === 'sign-in' ? z.string().optional() :  z.string().min(2, "State should be at least 2 characters").max(3, "State should be 3 characters or less"),
+  postalCode: type === 'sign-in' ? z.string().optional() :  z.string().min(3, "Postal Code should be at least 3 characters").max(6, "Postal Code should be 6 characters or less"),
+  dateOfBirth: type === 'sign-in' ? z.string().optional() :  z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date of Birth should be in YYYY-MM-DD format"),
+  ssn: type === 'sign-in' ? z.string().optional() :  z.string().min(3, "SSN should be at least 3 characters"),
+  
+  // ====== sign in =======
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(8, "Password should be at least 8 characters long"),
+});
 
-export const authFormSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  username: z.string().min(8),
-})
