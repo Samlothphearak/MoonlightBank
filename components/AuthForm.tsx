@@ -3,9 +3,49 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { Loader2 } from 'lucide-react'; // Import specific icon
+
+
+import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import CustomInput from './CustomInput';
+import { authFormSchema } from '@/lib/utils';
+
+
 
 const AuthForm = ({ type }: { type: string }) => {
     const [user, setUser] = useState(null);
+    const [isLoading, setIsloading] = useState(false);
+
+    // 1. Define your form.
+    const form = useForm<z.infer<typeof authFormSchema>>({
+        resolver: zodResolver(authFormSchema),
+        defaultValues: {
+            email: "",
+            password: '',
+        },
+    })
+
+    // 2. Define a submit handler.
+    function onSubmit(values: z.infer<typeof authFormSchema>) {
+        // Do something with the form values.
+        // ✅ This will be type-safe and validated.
+        setIsloading(true)
+        console.log(values)
+        setIsloading(false)
+    }
 
     return (
         <section className='auth-form'>
@@ -41,10 +81,51 @@ const AuthForm = ({ type }: { type: string }) => {
                 </div>
             ) : (
                 <>
-                    FORM
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <CustomInput
+                                control={form.control}
+                                name="email"
+                                label="Email"
+                                placeholder="Enter your email"
+                            />
+                            <CustomInput
+                                control={form.control}
+                                name="password"
+                                label="Password"
+                                placeholder="Enter your password"
+                            />
+
+                            <div className="flex flex-col gap-4">
+                                <Button type="submit" disabled={isLoading} className='form-btn'>
+                                    {isLoading ? (
+                                        <>
+                                            <Loader2 size={20} className="animate-spin" />
+                                            Loading...
+                                        </>
+                                    ) : type === 'sign-in'
+                                        ? 'Sign In' : 'Sign Up'}
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+                    <footer className='flex justify-center gap-1'>
+                        <p className='text-14 font-normal text-gray-600'>
+                            {type === 'sign-in'
+                                ? "Don't have an account?"
+                                : "Already have an account?"
+                            }
+                        </p>
+                        <Link href={type === 'sign-in' ? '/sign-up' : '/sign-in'} className='form-link'>
+                            {type === 'sign-in' ? 'Sign Up' : 'Sign In'}
+                        </Link>
+
+                    </footer>
+
                 </>
-            )}
-        </section>
+            )
+            }
+        </section >
     );
 };
 
