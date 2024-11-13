@@ -18,6 +18,7 @@ import {
 import CustomInput from './CustomInput';
 import { authFormSchema } from '@/lib/utils';
 import { useRouter } from 'next/navigation';
+import { signIn, signUp } from '@/lib/actions/user.actions';
 
 
 
@@ -39,28 +40,29 @@ const AuthForm = ({ type }: { type: string }) => {
 
     // 2. Define a submit handler.
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
-        setIsloading(true); // Start loading
+        setIsLoading(true); // Start loading
 
         try {
-            // Sign up with Appwrite & create plaid token.
+            // Sign up with Appwrite & create Plaid token.
             if (type === 'sign-up') {
-                // const userData = {
-                //     const newUser = await signUp(data);
-                //     setUser(newUser);
-            }
-            if (type === 'sign-in') {
-                // const respone = await signIn({
-                //     email: data.email,
-                //     password: data.password,
-                // })
-                // if (respone) router.push('/')
+                const newUser = await signUp(data);
+                setUser(newUser);
+            } else if (type === 'sign-in') {
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password,
+                });
+                if (response) {
+                    router.push('/');
+                }
             }
         } catch (error) {
             console.error("Error submitting form:", error);
         } finally {
-            setIsloading(false); // End loading
+            setIsLoading(false); // End loading
         }
     };
+
 
 
     return (
